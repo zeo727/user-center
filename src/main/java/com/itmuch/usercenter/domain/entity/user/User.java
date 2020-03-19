@@ -2,9 +2,13 @@ package com.itmuch.usercenter.domain.entity.user;
 
 import java.util.Date;
 import javax.persistence.*;
-import lombok.Data;
+
+import lombok.*;
 
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user")
 public class User {
     /**

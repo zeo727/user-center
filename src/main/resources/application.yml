@@ -20,13 +20,29 @@ spring:
           instance: c
           haha: hehe
           version: v1
+    stream:
+      rocketmq:
+        binder:
+          name-server: 127.0.0.1:9876
+      bindings:
+        input:
+          destination: add-bonus
+          #RocketMQ,一定要设置group，用其他MQ可留空
+          group: binder-group
+        my-input:
+          destination: stream-my-topic
+          group: my-group
   application:
     # 服务名称尽量用-，不要用_，不要用特殊字符
     name: user-center
 
 server:
   port: 8081
-
+rocketmq:
+  name-server: 127.0.0.1:9876
+logging:
+  level:
+    com.alibaba.nacos: error
 
 
 
