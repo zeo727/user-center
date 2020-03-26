@@ -2,7 +2,8 @@ package com.itmuch.usercenter.service.user;
 
 import com.itmuch.usercenter.dao.bonus.BonusEventLogMapper;
 import com.itmuch.usercenter.dao.user.UserMapper;
-import com.itmuch.usercenter.domain.dto.messaging.UserAddBonusMsgDto;
+import com.itmuch.usercenter.domain.dto.messaging.UserAddBonusMsgDTO;
+import com.itmuch.usercenter.domain.dto.user.UserLoginDTO;
 import com.itmuch.usercenter.domain.entity.bonus.BonusEventLog;
 import com.itmuch.usercenter.domain.entity.user.User;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +29,14 @@ public class UserService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void addBonus(UserAddBonusMsgDto msgDTO) {
+    public void addBonus(UserAddBonusMsgDTO msgDTO) {
         // 当收到消息的时候，执行的业务
         // 1.为用户加积分
         Integer userId = msgDTO.getUserId();
         Integer bonus = msgDTO.getBonus();
         User user = this.userMapper.selectByPrimaryKey(userId);
 
-        user.setBonus(user.getBonus()+ bonus);
+        user.setBonus(user.getBonus() + bonus);
         this.userMapper.updateByPrimaryKeySelective(user);
 
         // 2.记录日志到bonus_event_log表里面
@@ -49,6 +50,30 @@ public class UserService {
                         .build()
         );
         log.info("积分添加完毕...");
+    }
+
+    public User login(UserLoginDTO loginDTO, String openId) {
+        User user = this.userMapper.selectOne(
+                User.builder()
+                        .wxId(openId)
+                        .build()
+        );
+        if (user == null) {
+            User userToSave = User.builder()
+                    .wxId(openId)
+                    .bonus(300)
+                    .wxNickname(loginDTO.getWxNickname())
+                    .avatarUrl(loginDTO.getAvatarUrl())
+                    .roles("user")
+                    .createTime(new Date())
+                    .updateTime(new Date())
+                    .build();
+            this.userMapper.insertSelective(
+                    userToSave
+            );
+            return userToSave;
+        }
+        return user;
     }
 
 }

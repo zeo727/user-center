@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserAddBonusMsgDto {
+public class UserAddBonusMsgDTO {
     /**
      * 为谁加积分
      */

@@ -44,6 +44,15 @@ logging:
   level:
     com.alibaba.nacos: error
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
+
 
 
 
