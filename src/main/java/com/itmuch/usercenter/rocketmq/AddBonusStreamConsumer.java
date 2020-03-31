@@ -19,6 +19,8 @@ public class AddBonusStreamConsumer {
     @StreamListener(Sink.INPUT)
     public void receive(String message){
         UserAddBonusMsgDTO userAddBonusMsgDto  = JSON.parseObject(message, UserAddBonusMsgDTO.class);
+        userAddBonusMsgDto.setEvent("CONTRIBUTE");
+        userAddBonusMsgDto.setDesciption("投稿加积分...");
         this.userService.addBonus(userAddBonusMsgDto);
 
     }
